@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<ui:composition template="template.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="itemId" value="#{catalogItemDeleteBean.itemId}"/>
+        <f:event type="preRenderView" listener="#{catalogItemDeleteBean.fetchItem()}"/>
+    </f:metadata>
+
+    <ui:define name="body">
+
+        <h:form>
+
+            <h3>Please confirm that you would like to delete the following:</h3>
+            <div>
+                <h:outputLabel value="Name:"/>
+                <h:outputLabel value="#{catalogItemDeleteBean.item.name}"/>
+            </div>
+            <div>
+                <h:outputLabel value="Manufacturer:"/>
+                <h:outputLabel value="#{catalogItemDeleteBean.item.manufacturer}"/>
+            </div>
+            <div>
+                <h:outputLabel value="Available Date:"/>
+                <h:outputLabel value="#{catalogItemDeleteBean.item.availableDate}">
+                    <f:convertDateTime pattern="dd-MM-yyyy"/>
+                </h:outputLabel>
+            </div>
+            <h:commandButton action="#{catalogItemDeleteBean.removeItem()}" value="Submit"/>
+            <h:commandButton action="list" value="Cancel"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>
