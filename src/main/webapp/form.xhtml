@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<ui:composition template="template.xhtml">
+    <ui:define name="pageHeader">
+        <h:link value="#{msg['form.pageTitle']}" outcome="form"/><br/>
+        <h:link value="#{msg['list.pageTitle']}" outcome="list"/>
+    </ui:define>
+    <ui:define name="body">
+        <h:outputScript library="js" name="shake.js"/>
+        <h:form id="item-form">
+            <div>
+                <h:outputLabel value="Product Name"/>
+                <h:inputText id="productName" value="#{catalogItemFormBean.item.name}">
+                    <f:validateRegex pattern="[A-Za-z0-9 ]+"/>
+                </h:inputText>
+                <h:message for="productName"/>
+            </div>
+            <div>
+                <h:outputLabel value="Manufacturer"/>
+                <h:inputText value="#{catalogItemFormBean.item.manufacturer}"/>
+            </div>
+            <div>
+                <h:outputLabel value="Available Date"/>
+                <h:inputText value="#{catalogItemFormBean.item.availableDate}">
+                    <f:convertDateTime type="localDate" pattern="dd-MM-yyyy"/>
+                </h:inputText>
+            </div>
+            <div>
+                <h:outputLabel value="Description"/>
+                <h:inputTextarea value="#{catalogItemFormBean.item.description}"/>
+            </div>
+            <h:commandButton value="Submit" action="#{catalogItemFormBean.addItem()}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
