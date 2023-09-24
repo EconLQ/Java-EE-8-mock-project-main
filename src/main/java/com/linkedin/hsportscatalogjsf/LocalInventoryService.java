@@ -1,16 +1,17 @@
 package com.linkedin.hsportscatalogjsf;
 
+import com.linkedin.interceptors.Logging;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
 import java.util.HashMap;
 import java.util.Map;
 
 @ApplicationScoped
-@Alternative
 public class LocalInventoryService implements InventoryService {
     private Map<Long, InventoryItem> items = new HashMap<>();
 
     @Override
+    @Logging    // cause interceptor logic to be executed everytime when we invoke a  method
     public void createItem(Long catalogItemId, String name) {
         long inventoryItemId = items.size() + 1;
         this.items.put(inventoryItemId, new InventoryItem(inventoryItemId, catalogItemId, name, 0L));
