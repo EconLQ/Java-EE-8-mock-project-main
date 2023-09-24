@@ -1,4 +1,4 @@
-package com.linkedin.hsportscatalogjsf;
+package com.linkedin.hsportscatalogejb;
 
 import java.time.LocalDate;
 
