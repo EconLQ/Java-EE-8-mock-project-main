@@ -7,7 +7,7 @@ import java.util.List;
 @Local
 public interface CatalogLocal extends Serializable {
 
-    public List<CatalogItem> getItems();
+    List<CatalogItem> getItems();
 
-    public void addItem(CatalogItem item);
+    void addItem(CatalogItem item);
 }
