@@ -1,11 +1,12 @@
 package com.linkedin.hsportscatalogjsf;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.linkedin.hsportscatalogejb.CatalogItem;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Named
 @RequestScoped
