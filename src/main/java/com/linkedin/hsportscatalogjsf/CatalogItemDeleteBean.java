@@ -1,39 +1,37 @@
 package com.linkedin.hsportscatalogjsf;
 
 import com.linkedin.hsportscatalogejb.CatalogItem;
+import com.linkedin.hsportscatalogejb.CatalogLocal;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.Serializable;
 
 @Named
-@RequestScoped
-public class CatalogItemDeleteBean {
-	
+@ConversationScoped
+public class CatalogItemDeleteBean implements Serializable {
+
 	private long itemId;
 
 	private CatalogItem item;
 
 	@Inject
-	private CatalogItemFormBean catalogItemFormBean; 
+	private CatalogItemFormBean catalogItemFormBean;
+	@Inject
+	private CatalogLocal catalogBean;
+	@Inject
+	private Conversation conversation;    // to work with @ConversationScoped (specifically for JSF)
 
 	public void fetchItem() {
-		List<CatalogItem> items = this.catalogItemFormBean.getItems()
-				.stream()
-				.filter(i -> i.getItemId() == itemId).collect(Collectors.toList());
-
-		if (items.isEmpty()) {
-			this.item = null;
-		} else {
-			this.item = items.get(0);
-		}
-
+		conversation.begin();
+		this.item = catalogBean.findItem(this.itemId);
 	}
-	
+
 	public String removeItem() {
-		this.catalogItemFormBean.getItems().removeIf(item -> item.getItemId().equals(this.itemId));
+		this.catalogBean.deleteItem(item);
+		conversation.end();    // to end the conversation lifecycle scope for this bean
 		return "list?faces-redirect=true";
 	}
 
@@ -63,3 +61,4 @@ public class CatalogItemDeleteBean {
 
 
 }
+

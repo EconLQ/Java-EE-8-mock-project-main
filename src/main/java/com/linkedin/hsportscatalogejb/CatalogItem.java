@@ -1,25 +1,31 @@
 package com.linkedin.hsportscatalogejb;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "CATALOG_ITEM")
 public class CatalogItem {
 
+    @Id
+    @Column(name = "CATALOG_ITEM_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO) // selects the appropriate type automatically
     private Long itemId;
 
+    @Column(name = "NAME")
     private String name;
-
+    @Column(name = "MANUFACTURER")
     private String manufacturer;
-
+    @Column(name = "DESCRIPTION")
     private String description;
-
+    @Column(name = "AVAILABLE_DATE")
     private LocalDate availableDate;
 
     public CatalogItem() {
     }
 
-    public CatalogItem(Long itemId, String name, String manufacturer, String description, LocalDate availableDate) {
+    public CatalogItem(String name, String manufacturer, String description, LocalDate availableDate) {
         super();
-        this.itemId = itemId;
         this.name = name;
         this.manufacturer = manufacturer;
         this.description = description;

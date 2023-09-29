@@ -10,4 +10,10 @@ public interface CatalogLocal extends Serializable {
     List<CatalogItem> getItems();
 
     void addItem(CatalogItem item);
+
+    CatalogItem findItem(Long itemId);
+
+    void deleteItem(CatalogItem catalogItem);
+
+    List<CatalogItem> searchByName(String name);
 }

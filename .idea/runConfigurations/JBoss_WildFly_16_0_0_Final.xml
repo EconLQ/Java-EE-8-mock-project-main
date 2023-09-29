@@ -1,5 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="JBoss/WildFly 29.0.0.Final" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss/WildFly 29.0.0.Final" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+  <configuration default="false" name="JBoss/WildFly 16.0.0.Final" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss/WildFly 16.0.0.Final" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
+    <option name="UPDATE_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
     <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
       <artifact name="hsports-catalog-jsf:war exploded">
@@ -11,15 +13,12 @@
       <option name="BINDING_SET_NAME" value="" />
       <option name="DOMAIN" value="false" />
       <option name="SERVER_GROUP" value="main-server-group" />
-      <option name="USERNAME" value="" />
-      <option name="CREDENTIAL_ALIAS" />
+      <option name="USERNAME" value="adminLocal" />
+      <option name="CREDENTIAL_ALIAS" value="63647b3e-1d94-4d48-9d43-fcecc1c2b5c1" />
     </server-settings>
     <predefined_log_file enabled="true" id="JBoss" />
     <RunnerSettings RunnerId="Debug">
-      <option name="DEBUG_PORT" value="34293" />
-    </RunnerSettings>
-    <RunnerSettings RunnerId="JProfiler">
-      <option name="jreHome" value="/usr/lib/jvm/java-17-oracle" />
+      <option name="DEBUG_PORT" value="39305" />
     </RunnerSettings>
     <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
       <option name="USE_ENV_VARIABLES" value="true" />
@@ -51,21 +50,6 @@
         <option name="PROGRAM_PARAMETERS" value="" />
       </SHUTDOWN>
     </ConfigurationWrapper>
-    <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="JProfiler">
-      <option name="USE_ENV_VARIABLES" value="true" />
-      <STARTUP>
-        <option name="USE_DEFAULT" value="true" />
-        <option name="SCRIPT" value="" />
-        <option name="VM_PARAMETERS" value="" />
-        <option name="PROGRAM_PARAMETERS" value="" />
-      </STARTUP>
-      <SHUTDOWN>
-        <option name="USE_DEFAULT" value="true" />
-        <option name="SCRIPT" value="" />
-        <option name="VM_PARAMETERS" value="" />
-        <option name="PROGRAM_PARAMETERS" value="" />
-      </SHUTDOWN>
-    </ConfigurationWrapper>
     <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
       <option name="USE_ENV_VARIABLES" value="true" />
       <STARTUP>
@@ -83,7 +67,9 @@
     </ConfigurationWrapper>
     <method v="2">
       <option name="Make" enabled="true" />
-      <option name="BuildArtifacts" enabled="false" />
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="hsports-catalog-jsf:war exploded" />
+      </option>
     </method>
   </configuration>
 </component>

@@ -19,8 +19,8 @@ public class LocalInventoryService implements InventoryService {
     }
 
     private void printInventory() {
-        System.out.println("Local inventory contains: ");
-        this.items.forEach((key, value) -> System.out.println(value.getName()));
+        System.out.print("Local inventory contains: ");
+        this.items.forEach((key, value) -> System.out.print(value.getName() + ", "));
     }
 
     @Override
