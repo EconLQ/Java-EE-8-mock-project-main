@@ -9,8 +9,9 @@
         <f:viewAction action="#{catalogItemFormBean.init()}"/>
     </f:metadata>
     <ui:define name="pageHeader">
-        <h:link value="#{msg['form.pageTitle']}" outcome="form"/><br/>
-        <h:link value="#{msg['list.pageTitle']}" outcome="list"/>
+        <h:link value="#{msg['form.pageTitle']}" outcome="form"/> |
+        <h:link value="#{msg['list.pageTitle']}" outcome="list"/> |
+        <h:link value="#{msg['item.pageTitle']}" outcome="item"/>
     </ui:define>
     <ui:define name="body">
         <h:outputScript library="js" name="shake.js"/>
