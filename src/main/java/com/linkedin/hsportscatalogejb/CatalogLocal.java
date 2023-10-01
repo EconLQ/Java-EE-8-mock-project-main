@@ -16,4 +16,6 @@ public interface CatalogLocal extends Serializable {
     void deleteItem(CatalogItem catalogItem);
 
     List<CatalogItem> searchByName(String name);
+
+    void saveItem(CatalogItem item);
 }

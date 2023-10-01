@@ -51,4 +51,9 @@ public class Catalog implements CatalogLocal {
                 .setParameter("name", "%" + name + "%")
                 .getResultList();
     }
+
+    @Override
+    public void saveItem(CatalogItem item) {
+        this.entityManager.merge(item);
+    }
 }
