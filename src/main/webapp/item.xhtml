@@ -38,7 +38,8 @@
         <h:panelGroup id="managerList">
             <ui:repeat value="#{catalogItemDetailBean.item.itemManagers}" varStatus="status">
                 <h:outputText value="#{catalogItemDetailBean.item.itemManagers[status.index].firstName}"/>&#160;
-                <h:outputText value="${catalogItemDetailBean.item.itemManagers[status.index].lastName}"/>
+                <h:outputText value="${catalogItemDetailBean.item.itemManagers[status.index].lastName}"/> -
+                <h:outputText value="${catalogItemDetailBean.item.itemManagers[status.index].email}"/>
                 <br/>
             </ui:repeat>
         </h:panelGroup>
@@ -52,9 +53,13 @@
                 <br/>
                 <h:outputLabel value="Last Name"/>
                 <h:inputText id="lastName" value="#{catalogItemDetailBean.manager.lastName}"/>
+                <br/>
+                <br/>
+                <h:outputLabel value="Email"/>
+                <h:inputText id="email" value="#{catalogItemDetailBean.manager.email}"/>
             </div>
             <h:commandButton value="Submit" action="#{catalogItemDetailBean.addManager()}">
-                <f:ajax execute="firstName lastName" render="managerList"/>
+                <f:ajax execute="firstName lastName email" render="managerList"/>
             </h:commandButton>
         </h:form>
     </ui:define>

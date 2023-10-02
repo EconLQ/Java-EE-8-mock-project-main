@@ -1,6 +1,7 @@
 package com.linkedin.hsportscatalogejb;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,17 @@ public class ItemManager {
 
     @Column(name = "LAST_NAME")
     private String lastName;
+    @Email
+    @Column(name = "EMAIL")
+    private String email;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Long getItemManagerId() {
         return itemManagerId;
@@ -62,6 +73,7 @@ public class ItemManager {
                 ", catalogItems=" + catalogItems +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
