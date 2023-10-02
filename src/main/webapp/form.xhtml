@@ -21,21 +21,32 @@
                 <h:inputText id="productName" value="#{catalogItemFormBean.item.name}">
                     <f:validateRegex pattern="[A-Za-z0-9 ]+"/>
                 </h:inputText>
-                <h:message for="productName"/>
+                <div class="errorMessage">
+                    <h:message for="productName"/>
+                </div>
             </div>
             <div>
                 <h:outputLabel value="Manufacturer"/>
-                <h:inputText value="#{catalogItemFormBean.item.manufacturer}"/>
+                <h:inputText id="manufacturer" value="#{catalogItemFormBean.item.manufacturer}"/>
+                <div class="errorMessage">
+                    <h:message for="manufacturer"/>
+                </div>
             </div>
             <div>
                 <h:outputLabel value="Available Date"/>
-                <h:inputText value="#{catalogItemFormBean.item.availableDate}">
+                <h:inputText id="availableDate" value="#{catalogItemFormBean.item.availableDate}">
                     <f:convertDateTime type="localDate" pattern="dd-MM-yyyy"/>
                 </h:inputText>
+                <div class="errorMessage">
+                    <h:message for="availableDate"/>
+                </div>
             </div>
             <div>
                 <h:outputLabel value="Description"/>
-                <h:inputTextarea value="#{catalogItemFormBean.item.description}"/>
+                <h:inputTextarea id="description" value="#{catalogItemFormBean.item.description}"/>
+                <div class="errorMessage">
+                    <h:message for="description"/>
+                </div>
             </div>
             <h:commandButton value="Submit" action="#{catalogItemFormBean.addItem()}"/>
         </h:form>

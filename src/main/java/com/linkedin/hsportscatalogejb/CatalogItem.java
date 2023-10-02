@@ -1,6 +1,11 @@
 package com.linkedin.hsportscatalogejb;
 
+import com.linkedin.hsportscatalogejb.constraints.PermittedManufacturer;
+
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +19,27 @@ public class CatalogItem {
     @GeneratedValue(strategy = GenerationType.AUTO) // selects the appropriate type automatically
     private Long itemId;
     /*
+     * @Size - is a bean validation to ensure that each item can have no or 3 managers at max.
      * CascadeType.ALL - any operation on this entity is going to persist to any associated entities
      * FetchType.EAGER - when we retrieve this entity from the database we want to load all associated
      * entities with this entity
      * */
+    @Size(max = 3)
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "CATALOG_ITEM_ID"),
             inverseJoinColumns = @JoinColumn(name = "ITEM_MANAGER_ID"))
     private List<ItemManager> itemManagers = new ArrayList<>();
+    @NotBlank   // checks if string is equal to null or length doesn't equal zero
     @Column(name = "NAME")
     private String name;
+    @PermittedManufacturer  // custom constraint validator to check the manufacturer
     @Column(name = "MANUFACTURER")
     private String manufacturer;
+
+    @Alphabetic // custom bean validator for strings
     @Column(name = "DESCRIPTION")
     private String description;
+    @Future(message = "Must be a future date")
     @Column(name = "AVAILABLE_DATE")
     private LocalDate availableDate;
 
