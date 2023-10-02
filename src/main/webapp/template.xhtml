@@ -18,13 +18,6 @@
             font-size: 18px;
         }
 
-        .bottom {
-            font-family: Verdana, Arial, Helvetica, sans-serif;
-            font-size: 9px;
-            text-align: center;
-            vertical-align: middle;
-            color: #8E969D;
-        }
     </style>
     <h:outputStylesheet library="css" name="global.css"/>
 </h:head>
@@ -34,12 +27,12 @@
     <tbody>
 
     <tr>
-        <td class="header" height="42" align="center" valign="middle" width="100%" bgcolor="#E4EBEB">
+        <td class="header" height="42" align="center" valign="middle" width="100%" style="background-color:#E4EBEB">
             <ui:insert name="pageHeader">Page Header</ui:insert>
         </td>
     </tr>
     <tr>
-        <td height="1" width="100%" bgcolor="#CAD6E0"></td>
+        <td height="1" width="100%" style="background-color: #CAD6E0"/>
     </tr>
 
     <tr>
@@ -63,7 +56,7 @@
     </tr>
 
     <tr>
-        <td colspan="2" valign="bottom" height="1" width="100%" bgcolor="#CAD6E0"></td>
+        <td colspan="2" valign="bottom" height="1" width="100%" style="background-color: #CAD6E0"/>
     </tr>
     </tbody>
 </table>
