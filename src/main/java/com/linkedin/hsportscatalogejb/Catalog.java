@@ -28,7 +28,13 @@ public class Catalog implements CatalogLocal {
 
     @Override
     public void addItem(CatalogItem item) {
-        this.entityManager.persist(item);
+        if (this.entityManager.contains(item)) {
+            // persist is intended for brand new transient objects
+            this.entityManager.persist(item);
+        } else {
+            this.entityManager.merge(item);
+        }
+
     }
 
     @Override
