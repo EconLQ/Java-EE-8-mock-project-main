@@ -1,29 +1,44 @@
 package com.linkedin.hsportscatalogjsf;
 
+import com.linkedin.interceptors.Logging;
+import com.linkedin.jax.InventoryItem;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
-import java.util.HashMap;
-import java.util.Map;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
+import java.util.Random;
 
 @ApplicationScoped
-@Alternative
+@RemoteService
 public class RemoteInventoryService implements InventoryService {
-    private Map<Long, InventoryItem> items = new HashMap<>();
 
+    private String apiUrl = "http://localhost:8080/hsports-catalog-jsf-1.0-SNAPSHOT/hsports/api/";
+
+    /**
+     * Use client from JAX-RS lib to set up a target
+     * with base url to the {@link com.linkedin.jax.InventoryItem}.
+     * The method build call to REST API with JAX-RS client
+     */
     @Override
+    @Logging
     public void createItem(Long catalogItemId, String name) {
-        long inventoryItemID = items.size() + 1;
-        this.items.put(inventoryItemID, new InventoryItem(inventoryItemID, catalogItemId, name, 0L));
-        this.printInventory();
-    }
+        Client client = ClientBuilder.newClient();
 
-    private void printInventory() {
-        System.out.println("Remote inventory contains: ");
-        this.items.forEach((key, value) -> System.out.println(value.getName()));
+        Response response = client.target(apiUrl)
+                .path("inventoryitems")
+                .request()
+                .post(Entity.json(
+                        new InventoryItem(null, catalogItemId, name, (long) new Random().nextInt(10)))
+                );
+
+        System.out.println(response.getStatus());
+        System.out.println(response.getLocation().getPath());
     }
 
     @Override
     public Long getQuantity(Long catalogItemId) {
-        return items.isEmpty() ? 0 : (long) items.size() + 1;
+        return (long) new Random().nextInt(10);
     }
 }
