@@ -2,13 +2,14 @@
 
 ## Description:
 
-Java EE 8 project to keep me busy during learning of Java EE specs.
+Java EE 8 mock project to keep me busy while learning Java EE specs. Simple catalog management system for choosing items from local or remote inventory and assigning them to the managers. 
 
 Used APIs from Java EE 8 specs:
 
 - `JSF (v.2.3)`
 - `EJB (v.3.2.2)`
 - `CDI (v.2.0)`
+- `JAX-RS (v.2.1)`
 
 ***
 
