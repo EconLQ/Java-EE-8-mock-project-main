@@ -9,11 +9,13 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SessionScoped
 @Named
 public class CatalogItemFormBean implements Serializable {
     private static final long serialVersionUID = 1L;
+    Logger logger = Logger.getLogger(CatalogItemFormBean.class.getName());
     @Inject
     private CatalogLocal catalogBean;
     @Inject
@@ -31,6 +33,7 @@ public class CatalogItemFormBean implements Serializable {
 
     public String addItem() {
         this.catalogBean.addItem(this.item);
+        logger.info(this.item.toString());  // log the created object
 
         this.inventoryService.createItem(this.item.getItemId(), this.item.getName());
         return "list?faces-redirect=true";
