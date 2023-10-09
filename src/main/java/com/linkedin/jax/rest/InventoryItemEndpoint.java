@@ -66,12 +66,12 @@ public class InventoryItemEndpoint {
                 "select i from InventoryItem i", InventoryItem.class
         );
 
-        final List<InventoryItem> inventoryitems = query.getResultList();
-        if (inventoryitems == null) {
+        final List<InventoryItem> inventoryItems = query.getResultList();
+        if (inventoryItems == null) {
             System.out.println("There is no inventory items in the list...");
             return null;
         }
-        return inventoryitems;
+        return inventoryItems;
     }
 
     @Transactional
