@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.core.Response;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -32,16 +33,19 @@ public class RemoteInventoryService implements InventoryService {
 
         Client client = ClientBuilder.newClient();
 
-        Response response = client.target(API_URL)
+        try (Response response = client.target(API_URL)
                 .path("inventoryitems")
                 .request()
                 .post(Entity.json(
                         new InventoryItem(null, catalogItemId, name, (long) new Random().nextInt(10)))
-                );
+                )) {
 
-        logger.info("catalogItemId is: " + catalogItemId);
-        logger.info(String.valueOf(response.getStatus()));
-        logger.info(response.getLocation().getPath());
+            logger.info("catalogItemId is: " + catalogItemId);
+            logger.info(String.valueOf(response.getStatus()));
+            logger.info(response.getLocation().getPath());
+        } catch (ResponseProcessingException responseProcessingException) {
+            logger.warning("Bad request: " + responseProcessingException);
+        }
     }
 
     @Override
@@ -52,7 +56,8 @@ public class RemoteInventoryService implements InventoryService {
         Response response = client.target(API_URL)
                 .path("inventoryitems")
                 .path("catalog")
-                .queryParam("catalogItemId", catalogItemId.toString())
+                .path("{catalogItemId}")
+                .resolveTemplate("catalogItemId", catalogItemId.toString())
                 .request()
                 .get();
 
