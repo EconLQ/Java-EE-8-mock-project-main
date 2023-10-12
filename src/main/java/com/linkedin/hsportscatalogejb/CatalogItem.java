@@ -16,7 +16,7 @@ public class CatalogItem {
 
     @Id
     @Column(name = "CATALOG_ITEM_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO) // selects the appropriate type automatically
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // selects the appropriate type automatically
     private Long itemId;
     /*
      * @Size - is a bean validation to ensure that each item can have no or 3 managers at max.
@@ -25,7 +25,7 @@ public class CatalogItem {
      * entities with this entity
      * */
     @Size(max = 3)
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "CATALOG_ITEM_ID"),
             inverseJoinColumns = @JoinColumn(name = "ITEM_MANAGER_ID"))
     private List<ItemManager> itemManagers = new ArrayList<>();
