@@ -68,4 +68,13 @@ public class InventoryItem {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "InventoryItem{" +
+                "inventoryItemId=" + inventoryItemId +
+                ", catalogItemId=" + catalogItemId +
+                ", name='" + name + '\'' +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
