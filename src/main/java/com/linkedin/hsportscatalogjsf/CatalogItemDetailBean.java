@@ -3,6 +3,7 @@ package com.linkedin.hsportscatalogjsf;
 import com.linkedin.hsportscatalogejb.CatalogItem;
 import com.linkedin.hsportscatalogejb.CatalogLocal;
 import com.linkedin.hsportscatalogejb.ItemManager;
+import com.linkedin.jax.InventoryItem;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -11,11 +12,14 @@ import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 @Named
 @ConversationScoped
 public class CatalogItemDetailBean implements Serializable {
+    Logger logger = Logger.getLogger(CatalogItemDetailBean.class.getName());
     private long itemId;
     private CatalogItem item;
     private Long quantity;
@@ -60,13 +64,22 @@ public class CatalogItemDetailBean implements Serializable {
         this.item = item;
     }
 
-    public void fetchItem() {
+    public void fetchItem() throws InterruptedException, ExecutionException {
         this.item = this.catalogBean.findItem(this.itemId);
 
-        if (this.inventoryService.getQuantity(this.itemId) == null) {
-            this.quantity = (long) new Random().nextInt(100);
-        }
-        this.quantity = this.inventoryService.getQuantity(this.itemId);
+        // keep the number of call we expect to make and number of calls we receive back
+        CountDownLatch latch = new CountDownLatch(1);
+
+        this.inventoryService.reactiveGetQuantity(this.itemId)
+                .thenApply(InventoryItem::getQuantity)
+                .thenAccept(quantity -> {
+                    this.setQuantity(quantity);
+                    logger.info("The quantity is: " + quantity.toString());
+                    latch.countDown();
+                });
+
+        logger.info("Request is complete...");
+        latch.await();  // waits for the countdown to be done
     }
 
     public void addManager() {

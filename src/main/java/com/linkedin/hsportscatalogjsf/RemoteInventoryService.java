@@ -10,6 +10,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.core.Response;
 import java.util.Random;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 @ApplicationScoped
@@ -71,5 +73,40 @@ public class RemoteInventoryService implements InventoryService {
             logger.severe("Error message: " + response.readEntity(String.class) + " at: " + response.getLocation());
             return null;
         }
+    }
+
+    /**
+     * Retrieve a future of type InventoryItem and make a call to retrieve the response
+     *
+     * @param catalogItemId is a random value we get from {@link CatalogItemDetailBean#getQuantity()}
+     * @return future of InventoryItem
+     */
+    @Override
+    public Future<InventoryItem> asyncGetQuantity(Long catalogItemId) {
+        Client client = ClientBuilder.newClient();
+
+        return client.target(API_URL)
+                .path("inventoryitems")
+                .path("catalog")
+                .path("{catalogItemId}")
+                .resolveTemplate("catalogItemId", catalogItemId.toString())
+                .request()
+                .async()
+                .get(InventoryItem.class);
+    }
+
+    @Override
+    public CompletionStage<InventoryItem> reactiveGetQuantity(Long catalogItemId) {
+        Client client = ClientBuilder.newClient();
+
+        // only difference from the asnyc method is the switch after request from async to rx (reactive)
+        return client.target(API_URL)
+                .path("inventoryitems")
+                .path("catalog")
+                .path("{catalogItemId}")
+                .resolveTemplate("catalogItemId", catalogItemId.toString())
+                .request()
+                .rx()
+                .get(InventoryItem.class);
     }
 }
