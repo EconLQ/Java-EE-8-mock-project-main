@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Singleton bean implementation class Catalog
@@ -13,6 +14,7 @@ import java.util.List;
 @Singleton
 @LocalBean
 public class Catalog implements CatalogLocal {
+    Logger logger = Logger.getLogger(Catalog.class.getName());
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -28,8 +30,9 @@ public class Catalog implements CatalogLocal {
 
     @Override
     public void addItem(CatalogItem item) {
+        logger.info("Item added via Catalog.addItem(): " + item.getItemId());
         if (this.entityManager.contains(item)) {
-            // persist is intended for brand new transient objects
+            // persist is intended for brand-new transient objects
             this.entityManager.persist(item);
         } else {
             this.entityManager.merge(item);
