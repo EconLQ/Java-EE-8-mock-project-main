@@ -21,9 +21,7 @@ public class CatalogItemFormBean implements Serializable {
     @Inject
     @RemoteService
     private InventoryService inventoryService;
-
     private CatalogItem item = new CatalogItem();
-
     private List<CatalogItem> items = new ArrayList<>();
     private String searchText;
 
