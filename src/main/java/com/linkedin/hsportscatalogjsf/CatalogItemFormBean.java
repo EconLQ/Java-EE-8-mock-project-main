@@ -9,20 +9,19 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SessionScoped
 @Named
 public class CatalogItemFormBean implements Serializable {
     private static final long serialVersionUID = 1L;
+    Logger logger = Logger.getLogger(CatalogItemFormBean.class.getName());
     @Inject
     private CatalogLocal catalogBean;
     @Inject
+    @RemoteService
     private InventoryService inventoryService;
-    @Inject
-    private InventoryService remoteInventoryService;
-
     private CatalogItem item = new CatalogItem();
-
     private List<CatalogItem> items = new ArrayList<>();
     private String searchText;
 
@@ -31,12 +30,9 @@ public class CatalogItemFormBean implements Serializable {
     }
 
     public String addItem() {
-//        long itemId = catalogBean.getItems().size() + 1;
+        this.catalogBean.addItem(this.item);
+        logger.info(this.item.toString());  // log the created object
 
-        this.catalogBean.addItem(new CatalogItem(this.item.getName(), this.item.getManufacturer(),
-                this.item.getDescription(), this.item.getAvailableDate()));
-
-//        catalogBean.getItems().forEach(item -> System.out.println(item.toString()));
         this.inventoryService.createItem(this.item.getItemId(), this.item.getName());
         return "list?faces-redirect=true";
     }
@@ -85,11 +81,4 @@ public class CatalogItemFormBean implements Serializable {
         this.inventoryService = inventoryService;
     }
 
-    public InventoryService getRemoteInventoryService() {
-        return remoteInventoryService;
-    }
-
-    public void setRemoteInventoryService(InventoryService remoteInventoryService) {
-        this.remoteInventoryService = remoteInventoryService;
-    }
 }

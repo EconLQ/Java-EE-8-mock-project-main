@@ -1,29 +1,75 @@
 package com.linkedin.hsportscatalogjsf;
 
+import com.linkedin.interceptors.Logging;
+import com.linkedin.jax.InventoryItem;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
-import java.util.HashMap;
-import java.util.Map;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.ResponseProcessingException;
+import javax.ws.rs.core.Response;
+import java.util.Random;
+import java.util.logging.Logger;
 
 @ApplicationScoped
-@Alternative
+@RemoteService
 public class RemoteInventoryService implements InventoryService {
-    private Map<Long, InventoryItem> items = new HashMap<>();
+    private final String API_URL = "http://localhost:8080/hsports-catalog-jsf-1.0-SNAPSHOT/hsports/api/";
+    Logger logger = Logger.getLogger(RemoteInventoryService.class.getName());
 
+    /**
+     * Use client from JAX-RS lib to set up a target
+     * with base url to the {@link com.linkedin.jax.InventoryItem}.
+     * The method build call to REST API with JAX-RS client
+     */
     @Override
+    @Logging
     public void createItem(Long catalogItemId, String name) {
-        long inventoryItemID = items.size() + 1;
-        this.items.put(inventoryItemID, new InventoryItem(inventoryItemID, catalogItemId, name, 0L));
-        this.printInventory();
-    }
+        if (catalogItemId == null) {
+            logger.severe("catalogItemId is null");
+            return;
+        }
 
-    private void printInventory() {
-        System.out.println("Remote inventory contains: ");
-        this.items.forEach((key, value) -> System.out.println(value.getName()));
+        Client client = ClientBuilder.newClient();
+
+        try (Response response = client.target(API_URL)
+                .path("inventoryitems")
+                .request()
+                .post(Entity.json(
+                        new InventoryItem(null, catalogItemId, name, (long) new Random().nextInt(10)))
+                )) {
+
+            logger.info("catalogItemId is: " + catalogItemId);
+            logger.info(String.valueOf(response.getStatus()));
+            logger.info(response.getLocation().getPath());
+        } catch (ResponseProcessingException responseProcessingException) {
+            logger.warning("Bad request: " + responseProcessingException);
+        }
     }
 
     @Override
+    @Logging
     public Long getQuantity(Long catalogItemId) {
-        return items.isEmpty() ? 0 : (long) items.size() + 1;
+        Client client = ClientBuilder.newClient();
+
+        Response response = client.target(API_URL)
+                .path("inventoryitems")
+                .path("catalog")
+                .path("{catalogItemId}")
+                .resolveTemplate("catalogItemId", catalogItemId.toString())
+                .request()
+                .get();
+
+        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+            InventoryItem inventoryItem = response.readEntity(InventoryItem.class);
+            logger.info(inventoryItem.toString());
+
+            return inventoryItem.getQuantity();
+        } else {
+            logger.severe("Error: " + response.getStatus());
+            logger.severe("Error message: " + response.readEntity(String.class) + " at: " + response.getLocation());
+            return null;
+        }
     }
 }

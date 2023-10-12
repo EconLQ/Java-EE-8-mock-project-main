@@ -27,6 +27,10 @@
                 <h:outputLabel value="#{catalogItemDetailBean.item.manufacturer}"/>
             </div>
             <div>
+                <h:outputLabel value="Quantity:"/>
+                <h:outputLabel value="#{catalogItemDetailBean.quantity}"/>
+            </div>
+            <div>
                 <h:outputLabel value="Available Date:"/>
                 <h:outputLabel value="#{catalogItemDetailBean.item.availableDate}">
                     <f:convertDateTime type="localDate" pattern="dd-MM-yyyy"/>

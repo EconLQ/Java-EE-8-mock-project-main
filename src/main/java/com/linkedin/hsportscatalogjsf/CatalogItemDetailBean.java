@@ -11,17 +11,30 @@ import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.Random;
 
 @Named
 @ConversationScoped
 public class CatalogItemDetailBean implements Serializable {
     private long itemId;
     private CatalogItem item;
+    private Long quantity;
     @Inject
     private Conversation conversation;
     @Inject
     private CatalogLocal catalogBean;
+    @Inject
+    @RemoteService
+    private InventoryService inventoryService;
     private ItemManager manager = new ItemManager();
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
 
     public ItemManager getManager() {
         return manager;
@@ -49,6 +62,11 @@ public class CatalogItemDetailBean implements Serializable {
 
     public void fetchItem() {
         this.item = this.catalogBean.findItem(this.itemId);
+
+        if (this.inventoryService.getQuantity(this.itemId) == null) {
+            this.quantity = (long) new Random().nextInt(100);
+        }
+        this.quantity = this.inventoryService.getQuantity(this.itemId);
     }
 
     public void addManager() {

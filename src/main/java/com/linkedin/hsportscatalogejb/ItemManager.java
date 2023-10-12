@@ -10,7 +10,7 @@ import java.util.List;
 public class ItemManager {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ITEM_MANAGER_ID")
     private Long itemManagerId;
 
