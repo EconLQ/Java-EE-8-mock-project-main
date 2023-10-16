@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 @Named
@@ -64,7 +63,7 @@ public class CatalogItemDetailBean implements Serializable {
         this.item = item;
     }
 
-    public void fetchItem() throws InterruptedException, ExecutionException {
+    public void fetchItem() throws InterruptedException {
         this.item = this.catalogBean.findItem(this.itemId);
 
         // keep the number of call we expect to make and number of calls we receive back
@@ -74,7 +73,7 @@ public class CatalogItemDetailBean implements Serializable {
                 .thenApply(InventoryItem::getQuantity)
                 .thenAccept(quantity -> {
                     this.setQuantity(quantity);
-                    logger.info("The quantity is: " + quantity.toString());
+                    logger.info("The quantity of " + this.item.getName() + " is: " + quantity.toString());
                     latch.countDown();
                 });
 

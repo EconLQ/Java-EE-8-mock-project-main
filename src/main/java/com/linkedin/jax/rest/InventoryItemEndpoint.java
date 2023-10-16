@@ -2,8 +2,10 @@ package com.linkedin.jax.rest;
 
 
 import com.linkedin.jax.InventoryItem;
+import com.linkedin.jax.jms.JmsService;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -29,10 +31,17 @@ public class InventoryItemEndpoint {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Inject
+    private JmsService jmsService;
+
     @Transactional
     @POST
     public Response create(final InventoryItem inventoryitem) {
         this.entityManager.persist(inventoryitem);
+
+        // send a message to a queue with the name of the newly created inventory item
+        this.jmsService.send(inventoryitem.getName());
+
         return Response.created(
                         UriBuilder.fromResource(InventoryItemEndpoint.class)
                                 .path(String.valueOf(inventoryitem.getInventoryItemId())).build())
