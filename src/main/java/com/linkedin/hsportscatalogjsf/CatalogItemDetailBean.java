@@ -74,7 +74,7 @@ public class CatalogItemDetailBean implements Serializable {
                 .thenApply(InventoryItem::getQuantity)
                 .thenAccept(quantity -> {
                     this.setQuantity(quantity);
-                    logger.info("The quantity is: " + quantity.toString());
+                    logger.info("The quantity of " + this.item.getName() + " is: " + quantity.toString());
                     latch.countDown();
                 });
 
