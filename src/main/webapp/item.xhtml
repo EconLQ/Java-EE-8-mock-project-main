@@ -11,8 +11,9 @@
         <f:event type="preRenderView" listener="#{catalogItemDetailBean.fetchItem()}"/>
     </f:metadata>
     <ui:define name="pageHeader">
-        <h:link value="#{msg['form.pagetitle']}" outcome="form"/> |
-        <h:link value="#{msg['list.pagetitle']}" outcome="list"/>
+        <h:link value="#{msg['form.pageTitle']}" outcome="form"/> |
+        <h:link value="#{msg['list.pageTitle']}" outcome="list"/> |
+        <h:link value="#{msg['help.pageTitle']}" outcome="help-chat"/>
     </ui:define>
     <ui:define name="body">
 
