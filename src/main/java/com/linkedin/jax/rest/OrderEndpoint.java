@@ -7,6 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,8 +27,9 @@ public class OrderEndpoint {
 
     @POST
     public void placeOrder(Order order) {
-        Jsonb jsonb = JsonbBuilder.create();
-        String json = jsonb.toJson(order);  // serialize an object
+        JsonbConfig config = new JsonbConfig().withFormatting(true);    // JSON pretty format
+        Jsonb jsonb = JsonbBuilder.create(config);
+        String json = jsonb.toJson(order).toUpperCase();  // serialize an object
         logger.info(json);
 
         jmsService.send(json);

@@ -10,6 +10,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
+import javax.json.bind.config.PropertyNamingStrategy;
 import java.util.logging.Logger;
 
 /**
@@ -34,7 +36,10 @@ public class JmsConsumer implements MessageListener {
         logger.info("From JMS Consumer MDB:");
 
         try {
-            Jsonb jsonb = JsonbBuilder.create();
+            JsonbConfig config = new JsonbConfig()
+                    .withPropertyNamingStrategy(PropertyNamingStrategy.CASE_INSENSITIVE);
+
+            Jsonb jsonb = JsonbBuilder.create(config);
             String json = message.getBody(String.class);        // get serialized object
             Order order = jsonb.fromJson(json, Order.class);    // deserialize json to the Order object
 
