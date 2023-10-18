@@ -28,10 +28,14 @@ public class OrderEndpoint {
     @POST
     public void placeOrder(Order order) {
         JsonbConfig config = new JsonbConfig().withFormatting(true);    // JSON pretty format
-        Jsonb jsonb = JsonbBuilder.create(config);
-        String json = jsonb.toJson(order).toUpperCase();  // serialize an object
-        logger.info(json);
-
-        jmsService.send(json);
+        String json;
+        try (Jsonb jsonb = JsonbBuilder.create(config)) {
+            // serialize an object
+            json = jsonb.toJson(order).toUpperCase();
+            logger.info(json);
+            jmsService.send(json);
+        } catch (Exception e) {
+            logger.severe("Error ith creating Jsonb object" + e.getMessage());
+        }
     }
 }
