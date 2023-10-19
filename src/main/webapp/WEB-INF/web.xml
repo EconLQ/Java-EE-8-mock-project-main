@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <welcome-file-list>
-        <welcome-file>form.xhtml</welcome-file>
+        <welcome-file>/secure</welcome-file>
     </welcome-file-list>
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
