@@ -6,8 +6,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.json.Json;
-import javax.json.stream.JsonParser;
-import javax.json.stream.JsonParser.Event;
+import javax.json.JsonObject;
+import javax.json.JsonPointer;
+import javax.json.JsonReader;
 import java.io.StringReader;
 import java.util.logging.Logger;
 
@@ -42,25 +43,24 @@ public class JmsConsumer implements MessageListener {
     }
 
     private void parseJsonObject(String jsonQuery) {
-        try (JsonParser jsonParser = Json.createParser(new StringReader(jsonQuery))) {
-            // get each event of the parsed object
-            while (jsonParser.hasNext()) {
-                Event event = jsonParser.next();
+        try (JsonReader jsonReader = Json.createReader(new StringReader(jsonQuery))) {
+            JsonObject jsonObject = jsonReader.readObject();
+            // creating a pointer to get 1st quantity value of inventoryItems array
+            JsonPointer pointer = Json.createPointer("/inventoryItems/0/quantity".toUpperCase());
 
-                // parse certain events to log data
-                switch (event) {
-                    case KEY_NAME:
-                    case VALUE_STRING:
-                        logger.info(jsonParser.getString());
-                        break;
-                    case VALUE_NUMBER:
-                        logger.info(String.valueOf(jsonParser.getLong()));
-                        break;
-                    default:
-                        break;
-                }
-            }
+            long quantity = Long.parseLong(pointer.getValue(jsonObject).toString());
+
+            logger.info("Quantity before promo (2x): " + quantity);
+
+            jsonObject = Json.createPatchBuilder()
+                    .add("/promo", "double")
+                    .replace("/inventoryItems/0/quantity".toUpperCase(), Long.toString(quantity * 2L))
+                    .remove("/storeName".toUpperCase())
+                    .build()
+                    .apply(jsonObject);
+
+            logger.info("jsonObject: " + jsonObject);
+
         }
     }
-
 }
