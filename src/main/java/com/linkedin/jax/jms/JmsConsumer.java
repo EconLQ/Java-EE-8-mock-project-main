@@ -1,17 +1,14 @@
 package com.linkedin.jax.jms;
 
-import com.linkedin.jax.InventoryItem;
-import com.linkedin.jax.pojos.Order;
-
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfig;
-import javax.json.bind.config.PropertyNamingStrategy;
+import javax.json.Json;
+import javax.json.stream.JsonParser;
+import javax.json.stream.JsonParser.Event;
+import java.io.StringReader;
 import java.util.logging.Logger;
 
 /**
@@ -23,9 +20,6 @@ import java.util.logging.Logger;
 public class JmsConsumer implements MessageListener {
     private Logger logger = Logger.getLogger(JmsConsumer.class.getName());
 
-    /**
-     * Default constructor.
-     */
     public JmsConsumer() {
     }
 
@@ -36,20 +30,36 @@ public class JmsConsumer implements MessageListener {
         logger.info("From JMS Consumer MDB:");
 
         try {
-            JsonbConfig config = new JsonbConfig()
-                    .withPropertyNamingStrategy(PropertyNamingStrategy.CASE_INSENSITIVE);
-
-            Jsonb jsonb = JsonbBuilder.create(config);
             String json = message.getBody(String.class);        // get serialized object
-            Order order = jsonb.fromJson(json, Order.class);    // deserialize json to the Order object
 
-            order.getItems().stream()
-                    .map(InventoryItem::getName)
-                    .forEach(System.out::println);  // log each inventory item's name
+            parseJsonObject(json);  // parsing JSON object and log data
 
             logger.info(message.getBody(String.class));
+
         } catch (JMSException e) {
             logger.warning(e.getMessage());
+        }
+    }
+
+    private void parseJsonObject(String jsonQuery) {
+        try (JsonParser jsonParser = Json.createParser(new StringReader(jsonQuery))) {
+            // get each event of the parsed object
+            while (jsonParser.hasNext()) {
+                Event event = jsonParser.next();
+
+                // parse certain events to log data
+                switch (event) {
+                    case KEY_NAME:
+                    case VALUE_STRING:
+                        logger.info(jsonParser.getString());
+                        break;
+                    case VALUE_NUMBER:
+                        logger.info(String.valueOf(jsonParser.getLong()));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
